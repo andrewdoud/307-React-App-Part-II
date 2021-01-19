@@ -9,10 +9,25 @@ class App extends Component {
       characters: []
    };
 
+   makePostCall(character){
+      return axios.post('http://localhost:5000/users', character)
+       .then(function (response) {
+         console.log(response);
+         return (response.status === 201);
+       })
+       .catch(function (error) {
+         console.log(error);
+         return false;
+       });
+   }
+
    handleSubmit = character => {
-      // This essentially means append character to this.state.characters
-      this.setState({ characters: [...this.state.characters, character] })
-   };
+      this.makePostCall(character).then( callResult => {
+         if (callResult === true) {
+            this.setState({ characters: [...this.state.characters, character] });
+         }
+      });
+   }
 
    removeCharacter = index => {
       const { characters } = this.state
